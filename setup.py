@@ -1,15 +1,15 @@
 from setuptools import setup, find_packages
 
 
-with open("README.md", "r") as file:
+with open("README.md") as file:
     long_desc = file.read()
 
 setup(
     name="bbox",
-    version="0.1.0",
+    version="1.0.0",
     author="Konstantin Sebrovskiy",
     author_email="sebrovskiy.k@gmail.com",
-    description="Objected management of bboxes",
+    description="Objected management of bounding boxes",
     url="https://github.com/SEBROVATER/bbox",
     license="MIT",
     packages=find_packages(),

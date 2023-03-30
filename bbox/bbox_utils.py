@@ -1,9 +1,10 @@
 import math
+from contextlib import suppress
 
-import numpy as np
-from numpy.linalg import linalg
+with suppress(ImportError):
+    import numpy as np
 
-from .sources import BaseBBox, AnyBBox
+from .sources.bbox_creator import AnyBBox, BaseBBox
 
 
 def get_cos_between(bbox1: AnyBBox, bbox2: AnyBBox, xc: int | float, yc: int | float):
@@ -11,7 +12,7 @@ def get_cos_between(bbox1: AnyBBox, bbox2: AnyBBox, xc: int | float, yc: int | f
     v2 = np.array([bbox2.xc - xc, bbox2.yc - yc])
 
     inner = np.inner(v1, v2)
-    norms = linalg.norm(v1) * linalg.norm(v2)
+    norms = np.linalg.linalg.norm(v1) * np.linalg.linalg.norm(v2)
 
     cos = inner / norms
     return cos

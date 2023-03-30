@@ -14,6 +14,11 @@ class BaseBBox:
         self.y2 = 0
 
         getattr(self, "_BaseBBox__create_" + kind)(coords)
+        self.is_valid()
+
+    def is_valid(self):
+        comment = "Invalid coords passed, must be: x1({self.x1}) <= x2({self.x2}) and y1({self.y1}) <= y2({self.y2})"
+        assert (self.x1 <= self.x2) and (self.y1 <= self.y2), comment
 
     def __create_pascal_voc(self, coords: Sequence) -> None:
         self.x1, self.y1, self.x2, self.y2 = coords
@@ -51,7 +56,7 @@ class BaseBBox:
         self.x2 = self.x1 + coords["width"]
         self.y2 = self.y1 + coords["height"]
 
-    def __create_mss(self, coords: dict[str, int | float]):
+    def __create_mss(self, coords: dict[str, int | float]) -> None:
         self.x1 = coords["left"]
         self.y1 = coords["top"]
         self.x2 = self.x1 + coords["width"]

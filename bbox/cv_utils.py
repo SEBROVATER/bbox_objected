@@ -1,4 +1,7 @@
-import cv2
+from contextlib import suppress
+
+with suppress(ImportError):
+    import cv2
 
 
 def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
