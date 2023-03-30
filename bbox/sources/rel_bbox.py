@@ -131,6 +131,11 @@ class RelBBox(RelBBoxEditor):
     def is_valid(self):
         return ((0. <= self.x1 <= 1.) and (0. <= self.y1 <= 1.) and (0. <= self.x2 <= 1.) and (0. <= self.y2 <= 1.))
 
+    def crop_from(self, img):
+        h, w, c = img.shape
+        x1, y1, x2, y2 = self.get_abs_pascal_voc(w, h)
+        return img[y1:y2, x1:x2]
+
     def __repr__(self):
         bbox = f"RelBBox(x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2})"
         if text := self.text:
