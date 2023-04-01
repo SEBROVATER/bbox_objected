@@ -11,7 +11,7 @@ with suppress(ImportError):
 
 
 class BBoxImg(ABC):
-    def show_on(self, img: np.ndarray, text: str = ""):
+    def show_on(self, img, text: str = ""):
         img = img.copy()
         if len(img.shape) == 2:
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
@@ -52,7 +52,7 @@ class BBoxImg(ABC):
         cv2.waitKey(0)
         cv2.destroyWindow("temp")
 
-    def crop_from(self, img: np.ndarray):
+    def crop_from(self, img):
         if (
             (0.0 <= self.x1 <= 1.0)
             and (0.0 <= self.y1 <= 1.0)

@@ -4,6 +4,7 @@ from contextlib import suppress
 with suppress(ImportError):
     import numpy as np
 
+
 from .sources.bbox_creator import AnyBBox, BaseBBox
 
 
@@ -61,7 +62,7 @@ def get_distance(bbox_1: AnyBBox, bbox_2: AnyBBox):
     return math.dist(bbox_1.center, bbox_2.center)
 
 
-def non_max_suppression(x1y1x2y2: np.ndarray | list, thr: float) -> list[int | float]:
+def non_max_suppression(x1y1x2y2, thr: float) -> list[int | float]:
     if len(x1y1x2y2) == 0:
         return []
 

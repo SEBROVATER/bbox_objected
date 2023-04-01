@@ -4,7 +4,9 @@ with suppress(ImportError):
     import cv2
 
 
-def resize(image, width=None, height=None, inter=cv2.INTER_AREA):
+def resize(image, width=None, height=None, inter=None):
+    if inter is None:
+        inter = cv2.INTER_AREA
     # initialize the dimensions of the image to be resized and
     # grab the image size
     dim = None
