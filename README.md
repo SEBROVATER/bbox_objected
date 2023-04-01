@@ -1,14 +1,14 @@
-# bbox
+# bbox-objected
 
 ---
 
-Makes manipulations with bounding boxes easier in Computer Vision projects. With zero dependencies.
+Makes manipulations with bounding boxes easier in Computer Vision projects. With zero dependencies by default.
 
 ---
 
 ## Installation:
 
-`pip install https://github.com/SEBROVATER/bbox.git#egg=bbox`
+`pip install bbox-objected`
 
 ### Optional dependencies:
 
