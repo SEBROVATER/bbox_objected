@@ -2,8 +2,7 @@
 
 [tool.pdm.build]
 package-dir = "."
-includes = ["src", "data/*.json"]
-excludes = ["*.o"]
+excludes = ["*", "!bbox/"]
 
 [tool.pdm.dev-dependencies]
 dev = [
@@ -17,7 +16,7 @@ dev = [
 
 [project]
 name = "bbox_objected"
-version = "0.1.0"
+version = "0.1.5"
 description = "Manipulate bounding boxes as objects"
 authors = [
     {name = "SEBROVATER", email = "sebrovskiy.k@gmail.com"},
