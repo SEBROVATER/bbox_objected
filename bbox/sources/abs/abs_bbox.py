@@ -18,6 +18,9 @@ class AbsBBox(AbsBBoxEditor, BBoxImg):
         self.text = text
         self.__dict__.update(kwargs)
 
+    def crop_from(self, img):
+        return img[self.y1: self.y2 + 1, self.x1: self.x2 + 1]  # +1 to include all borders
+
     def is_valid(self):
         comment = "Use only int coords"
         return (

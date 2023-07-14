@@ -51,18 +51,3 @@ class BBoxImg(ABC):
         cv2.imshow("temp", resize(img, height=800))
         cv2.waitKey(0)
         cv2.destroyWindow("temp")
-
-    def crop_from(self, img):
-        if (
-            (0.0 <= self.x1 <= 1.0)
-            and (0.0 <= self.y1 <= 1.0)
-            and (0.0 <= self.x2 <= 1.0)
-            and (0.0 <= self.y2 <= 1.0)
-        ):
-            h, w, *c = img.shape
-            x1, y1, x2, y2 = self.as_abs(w, h).get_pascal_voc()
-            return img[y1:y2, x1:x2]
-        else:
-            img = img[self.y1 : self.y2, self.x1 : self.x2]
-
-            return img

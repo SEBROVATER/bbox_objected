@@ -18,6 +18,15 @@ class RelBBox(RelBBoxEditor, BBoxImg):
         self.text = text
         self.__dict__.update(kwargs)
 
+    def crop_from(self, img):
+        h, w, *c = img.shape
+        x1 = round(self.x1 * w)
+        x2 = round(self.x2 * w)
+        y1 = round(self.y1 * h)
+        y2 = round(self.y2 * h)
+
+        return img[y1:y2 + 1, x1:x2 + 1]  # +1 to include all borders
+
     def is_valid(self):
         comment = "Use only float coords in range [0, 1]"
         assert (
