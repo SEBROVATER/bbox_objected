@@ -25,7 +25,7 @@ class RelBBox(RelBBoxEditor, BBoxImg):
         y1 = round(self.y1 * h)
         y2 = round(self.y2 * h)
 
-        return img[y1:y2 + 1, x1:x2 + 1]  # +1 to include all borders
+        return img[y1:y2, x1:x2]
 
     def is_valid(self):
         comment = "Use only float coords in range [0, 1]"
