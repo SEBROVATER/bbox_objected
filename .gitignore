@@ -1,3 +1,9 @@
+.idea/
+.pdm-python
+.pdm-build
+pdm.lock
+.pdm.toml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -127,6 +133,3 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-
-.idea/
