@@ -1,8 +1,8 @@
-from typing import Sequence
+from collections.abc import Sequence
 
-from .editor import RelBBoxEditor
-from ..bbox_img import BBoxImg
 from ...types import BBoxKind
+from ..bbox_img import BBoxImg
+from .editor import RelBBoxEditor
 
 
 class RelBBox(RelBBoxEditor, BBoxImg):
@@ -47,7 +47,10 @@ class RelBBox(RelBBoxEditor, BBoxImg):
         return AbsBBox((x1, y1, x2, y2), text=self.text)
 
     def __repr__(self):
-        bbox = f"RelBBox(x1={round(self.x1, 3)}, y1={round(self.y1, 3)}, x2={round(self.x2, 3)}, y2={round(self.y2, 3)})"
+        bbox = (
+            f"RelBBox(x1={round(self.x1, 3)}, y1={round(self.y1, 3)}, "
+            f"x2={round(self.x2, 3)}, y2={round(self.y2, 3)})"
+        )
         if text := self.text:
             text = f" - {self.text}"
         return f"<{bbox}{text}>"

@@ -1,8 +1,8 @@
-from typing import Sequence
+from collections.abc import Sequence
 
-from .editor import AbsBBoxEditor
-from ..bbox_img import BBoxImg
 from ...types import BBoxKind
+from ..bbox_img import BBoxImg
+from .editor import AbsBBoxEditor
 
 
 class AbsBBox(AbsBBoxEditor, BBoxImg):
@@ -19,7 +19,7 @@ class AbsBBox(AbsBBoxEditor, BBoxImg):
         self.__dict__.update(kwargs)
 
     def crop_from(self, img):
-        return img[self.y1: self.y2, self.x1: self.x2]
+        return img[self.y1 : self.y2, self.x1 : self.x2]
 
     def is_valid(self):
         comment = "Use only int coords"

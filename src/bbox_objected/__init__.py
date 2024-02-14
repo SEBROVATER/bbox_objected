@@ -1,4 +1,10 @@
-from .bbox_utils import get_cos_between, get_IoU, sort_clockwise, get_distance, non_max_suppression
+from .bbox_utils import (
+    get_cos_between,
+    get_distance,
+    get_IoU,
+    non_max_suppression,
+    sort_clockwise,
+)
 from .sources.abs.abs_bbox import AbsBBox
 from .sources.pywinauto.pywinauto_bbox import PyWinAutoBBox
 from .sources.rel.rel_bbox import RelBBox

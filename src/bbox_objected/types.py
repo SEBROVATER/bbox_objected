@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class BBoxKind(Enum):
+class BBoxKind(str, Enum):
     free_list = "tl_tr_br_bl"
     tl_tr_br_bl = "tl_tr_br_bl"
     horizontal_list = "x1x2y1y2"

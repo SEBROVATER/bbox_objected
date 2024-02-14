@@ -1,13 +1,11 @@
 from abc import ABC
 from contextlib import suppress
 
-from ..cv_utils import resize
-
 with suppress(ImportError):
     import cv2
 
 with suppress(ImportError):
-    import numpy as np
+    pass
 
 
 class BBoxImg(ABC):
@@ -36,7 +34,10 @@ class BBoxImg(ABC):
             )
         else:
             cv2.rectangle(
-                img, (round(self.x1), round(self.y1)), (round(self.x2), round(self.y2)), (0, 255, 0)
+                img,
+                (round(self.x1), round(self.y1)),
+                (round(self.x2), round(self.y2)),
+                (0, 255, 0),
             )
             cv2.putText(
                 img,
@@ -48,6 +49,6 @@ class BBoxImg(ABC):
                 2,
             )
 
-        cv2.imshow("temp", resize(img, height=800))
+        cv2.imshow("bbox_objected_show", img)
         cv2.waitKey(0)
-        cv2.destroyWindow("temp")
+        cv2.destroyWindow("bbox_objected_show")

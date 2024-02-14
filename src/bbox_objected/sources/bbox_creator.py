@@ -1,4 +1,5 @@
-from typing import Sequence, TypeVar
+from collections.abc import Sequence
+from typing import TypeVar
 
 from ..types import BBoxKind
 
@@ -17,7 +18,10 @@ class BaseBBox:
         self.is_valid()
 
     def is_valid(self):
-        comment = "Invalid coords passed, must be: x1({self.x1}) <= x2({self.x2}) and y1({self.y1}) <= y2({self.y2})"
+        comment = (
+            "Invalid coords passed, must be: "
+            "x1({self.x1}) <= x2({self.x2}) and y1({self.y1}) <= y2({self.y2})"
+        )
         assert (self.x1 <= self.x2) and (self.y1 <= self.y2), comment
 
     def __create_pascal_voc(self, coords: Sequence) -> None:

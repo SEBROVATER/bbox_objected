@@ -1,14 +1,16 @@
 from abc import ABC
 
-from .bbox_creator import BaseBBox
 from ..types import BBoxKind
+from .bbox_creator import BaseBBox
 
 
 class BBoxGetter(BaseBBox, ABC):
     def get(self, kind: BBoxKind | str) -> tuple:
         return getattr(self, "get_" + str(kind))()
 
-    def get_pascal_voc(self) -> tuple[int | float, int | float, int | float, int | float]:
+    def get_pascal_voc(
+        self,
+    ) -> tuple[int | float, int | float, int | float, int | float]:
         return self.x1, self.y1, self.x2, self.y2
 
     def get_x1y1x2y2(self) -> tuple[int | float, int | float, int | float, int | float]:
@@ -40,7 +42,9 @@ class BBoxGetter(BaseBBox, ABC):
     ]:
         return self.get_free_list()
 
-    def get_horizontal_list(self) -> tuple[int | float, int | float, int | float, int | float]:
+    def get_horizontal_list(
+        self,
+    ) -> tuple[int | float, int | float, int | float, int | float]:
         return self.x1, self.x2, self.y1, self.y2
 
     def get_x1x2y1y2(self) -> tuple[int | float, int | float, int | float, int | float]:

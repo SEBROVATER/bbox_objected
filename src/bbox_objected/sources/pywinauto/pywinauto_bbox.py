@@ -1,5 +1,5 @@
-from .getter import PyWinAutoBBoxGetter
 from ..bbox_img import BBoxImg
+from .getter import PyWinAutoBBoxGetter
 
 
 class PyWinAutoBBox(PyWinAutoBBoxGetter, BBoxImg):
