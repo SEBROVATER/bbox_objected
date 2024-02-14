@@ -31,3 +31,8 @@ github = "https://github.com/SEBROVATER/bbox_objected"
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra"
+testpaths = [ "tests" ]
