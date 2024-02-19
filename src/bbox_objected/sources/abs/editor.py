@@ -35,14 +35,14 @@ class AbsBBoxEditor(BBoxGetter, ABC):
         self.y2 = round(self.y2 / value)
 
     def replace_from(self, bbox) -> None:
-        assert isinstance(bbox, self.__class__)
+        assert isinstance(bbox, AbsBBoxEditor)
         self.x1 = bbox.x1
         self.y1 = bbox.y1
         self.x2 = bbox.x2
         self.y2 = bbox.y2
 
     def update_from(self, bbox) -> None:
-        assert isinstance(bbox, self.__class__)
+        assert isinstance(bbox, AbsBBoxEditor)
 
         self.x1 = min(self.x1, bbox.x1)
         self.y1 = min(self.y1, bbox.y1)

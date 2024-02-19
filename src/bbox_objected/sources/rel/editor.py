@@ -28,7 +28,7 @@ class RelBBoxEditor(BBoxGetter):
         self.y2 = self.y2 / value
 
     def replace_from(self, bbox) -> None:
-        assert isinstance(bbox, self.__class__)
+        assert isinstance(bbox, RelBBoxEditor)
 
         self.x1 = bbox.x1
         self.y1 = bbox.y1
@@ -36,7 +36,7 @@ class RelBBoxEditor(BBoxGetter):
         self.y2 = bbox.y2
 
     def update_from(self, bbox) -> None:
-        assert isinstance(bbox, self.__class__)
+        assert isinstance(bbox, RelBBoxEditor)
 
         self.x1 = min(self.x1, bbox.x1)
         self.y1 = min(self.y1, bbox.y1)
