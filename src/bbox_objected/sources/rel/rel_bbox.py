@@ -14,7 +14,6 @@ class RelBBox(RelBBoxEditor, BBoxImg):
         **kwargs,
     ):
         super().__init__(coords, kind)
-        self.is_valid()
         self.text = text
         self.__dict__.update(kwargs)
 
@@ -35,6 +34,7 @@ class RelBBox(RelBBoxEditor, BBoxImg):
             and (0.0 <= self.x2 <= 1.0)
             and (0.0 <= self.y2 <= 1.0)
         ), comment
+        super().is_valid()
 
     def as_abs(self, img_w: int, img_h: int):
         from ..abs.abs_bbox import AbsBBox

@@ -14,7 +14,6 @@ class AbsBBox(AbsBBoxEditor, BBoxImg):
         **kwargs,
     ):
         super().__init__(coords, kind)
-        self.is_valid()
         self.text = text
         self.__dict__.update(kwargs)
 
@@ -23,13 +22,13 @@ class AbsBBox(AbsBBoxEditor, BBoxImg):
 
     def is_valid(self):
         comment = "Use only int coords"
-        return (
+        assert (
             isinstance(self.x1, int)
             and isinstance(self.y1, int)
             and isinstance(self.x2, int)
-            and isinstance(self.y2, int),
-            comment,
-        )
+            and isinstance(self.y2, int)
+        ), comment
+        super().is_valid()
 
     def as_rel(self, img_w: int, img_h: int):
         from ..rel.rel_bbox import RelBBox

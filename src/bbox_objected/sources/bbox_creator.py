@@ -20,7 +20,7 @@ class BaseBBox:
     def is_valid(self):
         comment = (
             "Invalid coords passed, must be: "
-            "x1({self.x1}) <= x2({self.x2}) and y1({self.y1}) <= y2({self.y2})"
+            f"x1({self.x1}) <= x2({self.x2}) and y1({self.y1}) <= y2({self.y2})"
         )
         assert (self.x1 <= self.x2) and (self.y1 <= self.y2), comment
 
