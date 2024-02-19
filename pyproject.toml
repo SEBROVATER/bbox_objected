@@ -15,7 +15,7 @@ dev = [
 ]
 [project]
 name = "bbox_objected"
-version = "0.2.3"
+version = "0.2.4"
 description = "Manipulate bounding boxes as objects"
 authors = [
     { name = "SEBROVATER", email = "sebrovskiy.k@gmail.com" },
