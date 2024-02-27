@@ -15,7 +15,7 @@ dev = [
 ]
 [project]
 name = "bbox_objected"
-version = "0.2.5"
+version = "0.2.6"
 description = "Manipulate bounding boxes as objects"
 authors = [
     { name = "SEBROVATER", email = "sebrovskiy.k@gmail.com" },
@@ -26,8 +26,8 @@ readme = "README.md"
 license = { text = "MIT" }
 
 [project.urls]
-github = "https://github.com/SEBROVATER/bbox_objected"
 home = "https://github.com/SEBROVATER/bbox_objected"
+github = "https://github.com/SEBROVATER/bbox_objected"
 
 [build-system]
 requires = ["pdm-backend"]
