@@ -1,15 +1,22 @@
-target-version = "py312"
+target-version = "py310"
 line-length = 100
 show-fixes = true
 
 [lint]
-select = ["E", "F", "UP", "I", "C90", "PL", "NPY", "RUF", "DJ"]
-ignore = ["PLR2004", "PLR0913", "PLR", "C901","PLW2901", "PLW0120", "RUF012", "F405", "F403",]
-
+select = ["ALL"]
+ignore = [
+    "D100","D101","D102","D103","D104","D105","D106","D107",
+    "CPY001",
+    "ANN003", "ANN002",
+    "TID252",
+    "FIX", "TD",
+    "RET504",
+]
+preview = true
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
 unfixable = []
-ignore-init-module-imports = true
+
 # Exclude a variety of commonly ignored directories.
 exclude = [
     ".bzr",
@@ -18,25 +25,28 @@ exclude = [
     ".git",
     ".git-rewrite",
     ".hg",
+    ".ipynb_checkpoints",
     ".mypy_cache",
     ".nox",
     ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
     ".pytype",
     ".ruff_cache",
     ".svn",
     ".tox",
     ".venv",
+    ".vscode",
     "__pypackages__",
     "_build",
     "buck-out",
     "build",
     "dist",
     "node_modules",
+    "site-packages",
     "venv",
     ".idea",
 ]
-
-
-
-# Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+[lint.per-file-ignores]
+"test_*.py" = ["S101", "ANN201"]
+"types.py" = ["A005"]
