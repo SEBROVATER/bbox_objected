@@ -1,3 +1,4 @@
+# ruff: noqa: PLR2004, PLC0415
 import sys
 from pathlib import Path
 
@@ -96,6 +97,7 @@ def test_getters():
 
 def test_crop_from():
     import numpy as np
+
     from bbox_objected import AbsBBox
 
     bbox = AbsBBox((100, 200, 300, 400))  # 'x1y1x2y2' bbox kind is default

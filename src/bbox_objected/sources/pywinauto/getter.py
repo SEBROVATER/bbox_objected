@@ -1,23 +1,22 @@
-from abc import ABC
-
+# ruff: noqa: PLR0904
 from ...types import BBoxKind
 
 
-class PyWinAutoBBoxGetter(ABC):
+class PyWinAutoBBoxGetter:
     @property
-    def x1(self):
+    def x1(self) -> int:
         return self.window.rectangle().left
 
     @property
-    def x2(self):
+    def x2(self) -> int:
         return self.window.rectangle().right
 
     @property
-    def y1(self):
+    def y1(self) -> int:
         return self.window.rectangle().top
 
     @property
-    def y2(self):
+    def y2(self) -> int:
         return self.window.rectangle().bottom
 
     def get(self, kind: BBoxKind | str) -> tuple:
@@ -61,22 +60,22 @@ class PyWinAutoBBoxGetter(ABC):
 
     @property
     def w(self) -> int:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        x1, _, x2, _ = self.__get_raw_coords()
         return x2 - x1
 
     @property
     def h(self) -> int:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        _, y1, _, y2 = self.__get_raw_coords()
         return y2 - y1
 
     @property
     def xc(self) -> int | float:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        x1, _, x2, _ = self.__get_raw_coords()
         return (x1 + x2) / 2
 
     @property
     def yc(self) -> int | float:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        _, y1, _, y2 = self.__get_raw_coords()
         return (y1 + y2) / 2
 
     @property
@@ -91,22 +90,22 @@ class PyWinAutoBBoxGetter(ABC):
 
     @property
     def tl(self) -> tuple[int, int]:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        x1, y1, _, _ = self.__get_raw_coords()
         return x1, y1
 
     @property
     def tr(self) -> tuple[int, int]:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        _, y1, x2, _ = self.__get_raw_coords()
         return x2, y1
 
     @property
     def br(self) -> tuple[int, int]:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        _, _, x2, y2 = self.__get_raw_coords()
         return x2, y2
 
     @property
     def bl(self) -> tuple[int, int]:
-        x1, y1, x2, y2 = self.__get_raw_coords()
+        x1, _, _, y2 = self.__get_raw_coords()
         return x1, y2
 
     def __get_raw_coords(self) -> tuple[int, int, int, int]:

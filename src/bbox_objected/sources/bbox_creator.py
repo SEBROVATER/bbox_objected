@@ -5,9 +5,11 @@ from ..types import BBoxKind
 
 
 class BaseBBox:
-    def __init__(self, coords: Sequence, kind: BBoxKind | str):
+    def __init__(self, coords: Sequence, kind: BBoxKind | str) -> None:
         kind = str(kind)
-        assert kind in BBoxKind.__members__, f"Unacceptable bbox kind <{kind}>"
+        if kind not in BBoxKind.__members__:
+            err = f"Unacceptable bbox kind <{kind}>"
+            raise TypeError(err)
 
         self.x1 = 0
         self.y1 = 0
@@ -17,12 +19,14 @@ class BaseBBox:
         getattr(self, "_BaseBBox__create_" + kind)(coords)
         self.is_valid()
 
-    def is_valid(self):
+    def is_valid(self) -> bool:
         comment = (
             "Invalid coords passed, must be: "
             f"x1({self.x1}) <= x2({self.x2}) and y1({self.y1}) <= y2({self.y2})"
         )
-        assert (self.x1 <= self.x2) and (self.y1 <= self.y2), comment
+        if not ((self.x1 <= self.x2) and (self.y1 <= self.y2)):
+            raise ValueError(comment)
+        return True
 
     def __create_pascal_voc(self, coords: Sequence) -> None:
         self.x1, self.y1, self.x2, self.y2 = coords
@@ -38,7 +42,7 @@ class BaseBBox:
         self.__create_coco(coords)
 
     def __create_free_list(self, coords: Sequence) -> None:
-        (self.x1, self.y1), (x2, y1), (self.x2, self.y2), (x1, y2) = coords
+        (self.x1, self.y1), (_, _), (self.x2, self.y2), (_, _) = coords
 
     def __create_tl_tr_br_bl(self, coords: Sequence) -> None:
         self.__create_free_list(coords)
@@ -66,7 +70,7 @@ class BaseBBox:
         self.x2 = self.x1 + coords["width"]
         self.y2 = self.y1 + coords["height"]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         bbox = f"BBox(x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2})"
         return f"<{bbox}>"
 

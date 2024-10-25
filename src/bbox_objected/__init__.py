@@ -1,3 +1,5 @@
+import types
+
 from .bbox_utils import (
     get_cos_between,
     get_distance,
@@ -11,12 +13,12 @@ from .sources.rel.rel_bbox import RelBBox
 
 __all__ = [
     "AbsBBox",
-    "RelBBox",
     "PyWinAutoBBox",
-    "get_cos_between",
+    "RelBBox",
     "get_IoU",
-    "sort_clockwise",
+    "get_cos_between",
     "get_distance",
     "non_max_suppression",
+    "sort_clockwise",
     "types",
 ]
