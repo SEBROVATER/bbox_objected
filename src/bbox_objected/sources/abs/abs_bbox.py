@@ -30,7 +30,7 @@ class AbsBBox(BBoxImgMixin, AbsBBoxEditor):
             return img[self.y1 : self.y2, self.x1 : self.x2]
 
     def is_valid(self) -> bool:
-        comment = "Use only int coords"
+        comment = "Invalid coords passed. Use only 'int' coords"
         if not (
             isinstance(self.x1, int)
             and isinstance(self.y1, int)

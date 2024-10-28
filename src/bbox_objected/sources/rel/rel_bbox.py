@@ -13,7 +13,7 @@ except ImportError:
 
 
 class RelBBox(RelBBoxEditor, BBoxImgMixin):
-    _REL_VALIDATION_ERROR = "Use only float coords in range [0, 1]"
+    _REL_VALIDATION_ERROR = "Invalid coords passed. Use only float coords in range [0, 1]"
 
     def __init__(
         self,
