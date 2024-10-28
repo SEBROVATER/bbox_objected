@@ -11,6 +11,7 @@ ignore = [
     "TID252",
     "FIX", "TD",
     "RET504",
+    "PLC0414",
 ]
 preview = true
 # Allow autofix for all enabled rules (when `--fix`) is provided.
