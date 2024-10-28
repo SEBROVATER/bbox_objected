@@ -48,5 +48,5 @@ exclude = [
     ".idea",
 ]
 [lint.per-file-ignores]
-"test_*.py" = ["S101", "ANN201", "PLR2004"]
+"test_*.py" = ["S101", "ANN201", "PLR2004", "PLC0415"]
 "types.py" = ["A005"]
