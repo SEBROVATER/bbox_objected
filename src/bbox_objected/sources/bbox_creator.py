@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 from typing import TypeVar
 
-from ..types import BBoxKind
+from ..annotations import BBoxKind
 
 
 class BaseBBox:

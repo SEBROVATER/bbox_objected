@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 
-from ...types import BBoxKind
+from ...annotations import BBoxKind
 from ..bbox_img import BBoxImgMixin
 from .editor import AbsBBoxEditor
 

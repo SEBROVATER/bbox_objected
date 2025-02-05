@@ -6,7 +6,7 @@ import pytest
 
 @pytest.fixture
 def numpy_uninstalled() -> None:
-    import builtins  # noqa: PLC0415
+    import builtins
 
     real_import = builtins.__import__
 

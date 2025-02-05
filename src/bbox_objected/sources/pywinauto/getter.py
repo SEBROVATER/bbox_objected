@@ -1,5 +1,5 @@
 # ruff: noqa: PLR0904
-from ...types import BBoxKind
+from ...annotations import BBoxKind
 
 
 class PyWinAutoBBoxGetter:

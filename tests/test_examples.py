@@ -49,7 +49,7 @@ def test_attributes():
 
 
 def test_kinds():
-    from bbox_objected.types import BBoxKind
+    from bbox_objected.annotations import BBoxKind
 
     # special format of 'EasyOCR' library
     assert BBoxKind.free_list == "tl_tr_br_bl"

@@ -1,6 +1,6 @@
 from abc import ABC
 
-from ..types import BBoxKind
+from ..annotations import BBoxKind
 from .bbox_creator import BaseBBox
 
 
