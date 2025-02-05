@@ -2,19 +2,29 @@
 
 ---
 
-Makes manipulations with bounding boxes easier in Computer Vision projects. With zero dependencies by default.
-
+Makes manipulating bounding boxes easier in Computer Vision projects, 
+with zero dependencies by default.
 ---
 
 ## Installation:
 
-`pip install bbox-objected`
+`pip install bbox-objected` - without any sub-dependencies
 
 ### Optional dependencies:
 
-`pip install numpy`
+You can install `numpy` or `opencv` separately. But just for fun, some extra options exist:
 
-`pip install opencv-python` or `pip install opencv-contrib-python`
+`pip install bbox-objected[opencv]` - adds `opencv-python` as a subdependency.
+
+`pip install bbox-objected[headless]` - adds `opencv-python-headless` as a subdependency.
+
+`pip install bbox-objected[contrib]` - adds `opencv-contrib-python` as a subdependency.
+
+`pip install bbox-objected[contrib-headless]` - adds `opencv-contrib-python-headless` as a subdependency.
+
+`numpy` is included with each of the options above.
+
+> Be aware that different `opencv` versions are incompatible with each other.
 
 ## Examples:
 `AbsBBox` is needed to store absolute coordinates (uses `int` type strictly)
