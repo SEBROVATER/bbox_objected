@@ -43,9 +43,6 @@ minversion = "8.0"
 addopts = "-ra"
 testpaths = [ "tests" ]
 
-[tool.pdm.build]
-package-dir = "src"
-
 [dependency-groups]
 dev = [
     "pre-commit>=4.1.0",
