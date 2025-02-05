@@ -96,14 +96,12 @@ assert BBoxKind.x1y1x2y2 == "x1y1x2y2"
 # own format of COCO image dataset
 assert BBoxKind.coco == "x1y1wh"
 assert BBoxKind.x1y1wh == "x1y1wh"
-# gets object of '.rectangle()' method of 'PyWinAuto' library
-assert BBoxKind.pywinauto == "pywinauto"
 # gets special coords format of 'WinOCR' library
 assert BBoxKind.winocr == "winocr"
 # gets 'monitor' object of library 'mss'
 assert BBoxKind.mss == "mss"
 ```
-There is respective `get_` method for each bbox _**kind**_, except `"pywinauto"` and `"winocr"`
+There is respective `get_` method for each bbox _**kind**_, except `"winocr"`
 
 Some simple editing of bboxes is also available
 
