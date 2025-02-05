@@ -1,3 +1,4 @@
+from collections.abc import Generator
 from types import ModuleType
 from unittest import mock
 
@@ -5,7 +6,7 @@ import pytest
 
 
 @pytest.fixture
-def numpy_uninstalled() -> None:
+def numpy_uninstalled() -> Generator[None, None, None]:
     import builtins
 
     real_import = builtins.__import__

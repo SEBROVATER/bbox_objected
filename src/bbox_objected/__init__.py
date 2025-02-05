@@ -8,12 +8,10 @@ from .bbox_utils import (
     sort_clockwise,
 )
 from .sources.abs.abs_bbox import AbsBBox
-from .sources.pywinauto.pywinauto_bbox import PyWinAutoBBox
 from .sources.rel.rel_bbox import RelBBox
 
 __all__ = [
     "AbsBBox",
-    "PyWinAutoBBox",
     "RelBBox",
     "get_IoU",
     "get_cos_between",

@@ -53,12 +53,6 @@ class BaseBBox:
     def __create_x1x2y1y2(self, coords: Sequence) -> None:
         self.__create_horizontal_list(coords)
 
-    def __create_pywinauto(self, coords: Sequence) -> None:
-        self.x1 = coords.left
-        self.y1 = coords.top
-        self.x2 = coords.right
-        self.y2 = coords.bottom
-
     def __create_winocr(self, coords: dict[str, int | float]) -> None:
         self.x1, self.y1 = coords["x"], coords["y"]
         self.x2 = self.x1 + coords["width"]

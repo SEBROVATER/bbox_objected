@@ -1,25 +1,35 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, NoReturn
+
+if TYPE_CHECKING:
+    import numpy.typing as npt
+
+    from bbox_objected import AbsBBox, RelBBox
 
 try:
     import cv2
 
     _OPENCV_AVAILABLE = True
-    import numpy.typing as npt
 except ImportError:
     _OPENCV_AVAILABLE = False
 
 
 class BBoxImgMixin:
-    @staticmethod
-    def crop_from(img: Any) -> None:  # noqa: ANN401
+    x1: float
+    y1: float
+    x2: float
+    y2: float
+
+    def crop_from(self, img: npt.NDArray) -> NoReturn:
         err = "'numpy' is required to use 'crop_from' method"
         raise NotImplementedError(err)
 
     if _OPENCV_AVAILABLE:
 
-        def show_on(self, img: npt.NDArray, text: str = "") -> None:
+        def show_on(self: RelBBox | AbsBBox, img: npt.NDArray, text: str = "") -> None:
             img = img.copy()
-            if len(img.shape) == 2:  # noqa: PLR2004
+            if img.ndim == 2:  # noqa: PLR2004
                 img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
             if (
@@ -62,7 +72,6 @@ class BBoxImgMixin:
             cv2.destroyWindow("bbox_objected_show")
     else:
 
-        @staticmethod
-        def show_on(*args, **kwargs) -> None:
+        def show_on(self: RelBBox | AbsBBox, img: npt.NDArray, text: str = "") -> NoReturn:
             err = "'OpenCV' is required to use 'show_on' method"
             raise NotImplementedError(err)
