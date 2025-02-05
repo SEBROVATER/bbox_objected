@@ -72,7 +72,7 @@ assert (bbox.xc, bbox.yc) == (50.0, 50.0)
 Available _**kinds**_ of bboxes:
 
 ```python
-from bbox_objected.types import BBoxKind
+from bbox_objected.annotations import BBoxKind
 
 # special format of 'EasyOCR' library
 assert BBoxKind.free_list == "tl_tr_br_bl"
