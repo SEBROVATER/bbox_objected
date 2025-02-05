@@ -38,6 +38,9 @@ package = true
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
+[tool.pdm.build]
+excludes = ["tests"]
+
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = "-ra"
