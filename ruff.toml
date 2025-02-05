@@ -12,6 +12,10 @@ ignore = [
     "FIX", "TD",
     "RET504",
     "PLC0414",
+    "D203","D213",
+    "COM812",
+    "FBT",
+    "DOC502",
 ]
 preview = true
 # Allow autofix for all enabled rules (when `--fix`) is provided.
@@ -49,5 +53,12 @@ exclude = [
     ".idea",
 ]
 [lint.per-file-ignores]
-"test_*.py" = ["S101", "ANN201", "PLR2004", "PLC0415"]
-"types.py" = ["A005"]
+"**/tests/*" = [
+    "S101",
+    "ANN201",
+    "PLR2004",
+    "PLC0415",
+    "ANN205",
+    "ANN201",
+    "PLR6301",
+]
