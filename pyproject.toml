@@ -13,6 +13,24 @@ license = {text = "Apache-2.0"}
 [project.urls]
 home = "https://github.com/SEBROVATER/bbox_objected"
 
+[project.optional-dependencies]
+contrib = [
+    "numpy>=1.22.0",
+    "opencv-contrib-python>=4.7.0.71",
+]
+contrib-headless = [
+    "numpy>=1.22.0",
+    "opencv-contrib-python-headless>=4.7.0.71",
+]
+opencv = [
+    "numpy>=1.22.0",
+    "opencv-python>=4.7.0.71",
+]
+headless = [
+    "numpy>=1.22.0",
+    "opencv-python-headless>=4.7.0.71",
+]
+
 [tool.uv]
 package = true
 
@@ -30,8 +48,6 @@ package-dir = "src"
 
 [dependency-groups]
 dev = [
-    "numpy>=2.2.2",
-    "opencv-python>=4.11.0.86",
     "pre-commit>=4.1.0",
     "pyright>=1.1.393",
     "pytest>=8.3.4",
