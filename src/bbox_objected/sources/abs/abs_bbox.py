@@ -1,15 +1,18 @@
-from collections.abc import Sequence
+from __future__ import annotations
 
-from ...annotations import BBoxKind
+from typing import TYPE_CHECKING
+
 from ..bbox_img import BBoxImgMixin
 from .editor import AbsBBoxEditor
 
-try:
-    import numpy.typing as npt
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
-    _NUMPY_AVAILABLE = True
-except ImportError:
-    _NUMPY_AVAILABLE = False
+    import numpy as np
+    import numpy.typing as npt
+    from cv2.typing import MatLike
+
+    from ...annotations import BBoxKind
 
 
 class AbsBBox(BBoxImgMixin, AbsBBoxEditor):
@@ -18,16 +21,12 @@ class AbsBBox(BBoxImgMixin, AbsBBoxEditor):
         coords: Sequence,
         kind: BBoxKind | str = "x1y1x2y2",
         text: str = "",
-        **kwargs,
     ) -> None:
         super().__init__(coords, kind)
         self.text = text
-        self.__dict__.update(kwargs)
 
-    if _NUMPY_AVAILABLE:
-
-        def crop_from(self, img: npt.NDArray) -> npt.NDArray:
-            return img[self.y1 : self.y2, self.x1 : self.x2]
+    def crop_from(self, img: npt.NDArray) -> npt.NDArray:
+        return img[self.y1 : self.y2, self.x1 : self.x2]
 
     def is_valid(self) -> bool:
         comment = "Invalid coords passed. Use only 'int' coords"
@@ -43,12 +42,15 @@ class AbsBBox(BBoxImgMixin, AbsBBoxEditor):
     def as_rel(self, img_w: int, img_h: int):  # noqa: ANN201
         from ..rel.rel_bbox import RelBBox  # noqa: PLC0415
 
-        x1, y1, x2, y2 = self.get_pascal_voc()
+        x1, y1, x2, y2 = self.get_x1y1x2y2()
         x1 /= img_w
         y1 /= img_h
         x2 /= img_w
         y2 /= img_h
         return RelBBox((x1, y1, x2, y2), text=self.text)
+
+    def show_on(self, img: npt.NDArray[np.uint8] | MatLike) -> None:
+        self.__show_on(self.get_x1y1x2y2(), img, self.text)
 
     def __repr__(self) -> str:
         bbox = f"AbsBBox(x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2})"

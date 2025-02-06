@@ -1,20 +1,22 @@
 from collections.abc import Sequence
-from typing import TypeVar
+from typing import Generic, TypeVar
 
 from ..annotations import BBoxKind
 
+T = TypeVar("T", int, float)
 
-class BaseBBox:
-    def __init__(self, coords: Sequence, kind: BBoxKind | str) -> None:
+
+class BaseBBox(Generic[T]):
+    def __init__(self, coords: Sequence[T], kind: BBoxKind | str) -> None:
         kind = str(kind)
         if kind not in BBoxKind.__members__:
             err = f"Unacceptable bbox kind <{kind}>"
             raise TypeError(err)
 
-        self.x1 = 0
-        self.y1 = 0
-        self.x2 = 0
-        self.y2 = 0
+        self.x1: T
+        self.y1: T
+        self.x2: T
+        self.y2: T
 
         getattr(self, "_BaseBBox__create_" + kind)(coords)
         self.is_valid()
@@ -53,12 +55,12 @@ class BaseBBox:
     def __create_x1x2y1y2(self, coords: Sequence) -> None:
         self.__create_horizontal_list(coords)
 
-    def __create_winocr(self, coords: dict[str, int | float]) -> None:
+    def __create_winocr(self, coords: dict[str, T]) -> None:
         self.x1, self.y1 = coords["x"], coords["y"]
         self.x2 = self.x1 + coords["width"]
         self.y2 = self.y1 + coords["height"]
 
-    def __create_mss(self, coords: dict[str, int | float]) -> None:
+    def __create_mss(self, coords: dict[str, T]) -> None:
         self.x1 = coords["left"]
         self.y1 = coords["top"]
         self.x2 = self.x1 + coords["width"]
@@ -67,6 +69,3 @@ class BaseBBox:
     def __repr__(self) -> str:
         bbox = f"BBox(x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2})"
         return f"<{bbox}>"
-
-
-AnyBBox = TypeVar("AnyBBox", bound=BaseBBox)

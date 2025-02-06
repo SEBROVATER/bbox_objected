@@ -1,15 +1,7 @@
-from abc import ABC
-
-from ..bbox_getter import BBoxGetter
+from ..bbox_editor import BBoxEditor
 
 
-class AbsBBoxEditor(BBoxGetter, ABC):
-    _TYPE_VALIDATION_ERROR = (
-        "Can only replace from the same bbox class"
-        "Cast to the same type with 'as_' method, "
-        "if it is intended"
-    )
-
+class AbsBBoxEditor(BBoxEditor[int]):
     def round_coords(self) -> None:
         self.x1 = round(self.x1)
         self.y1 = round(self.y1)
@@ -39,20 +31,3 @@ class AbsBBoxEditor(BBoxGetter, ABC):
         self.y1 = round(self.y1 / value)
         self.x2 = round(self.x2 / value)
         self.y2 = round(self.y2 / value)
-
-    def replace_from(self, bbox: "AbsBBoxEditor") -> None:
-        if not isinstance(bbox, AbsBBoxEditor):
-            raise TypeError(self._TYPE_VALIDATION_ERROR)
-        self.x1 = bbox.x1
-        self.y1 = bbox.y1
-        self.x2 = bbox.x2
-        self.y2 = bbox.y2
-
-    def update_from(self, bbox: "AbsBBoxEditor") -> None:
-        if not isinstance(bbox, AbsBBoxEditor):
-            raise TypeError(self._TYPE_VALIDATION_ERROR)
-
-        self.x1 = min(self.x1, bbox.x1)
-        self.y1 = min(self.y1, bbox.y1)
-        self.x2 = max(self.x2, bbox.x2)
-        self.y2 = max(self.y2, bbox.y2)

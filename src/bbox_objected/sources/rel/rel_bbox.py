@@ -1,15 +1,18 @@
-from collections.abc import Sequence
+from __future__ import annotations
 
-from ...annotations import BBoxKind
+from typing import TYPE_CHECKING
+
 from ..bbox_img import BBoxImgMixin
 from .editor import RelBBoxEditor
 
-try:
-    import numpy.typing as npt
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
-    _NUMPY_AVAILABLE = True
-except ImportError:
-    _NUMPY_AVAILABLE = False
+    import numpy as np
+    import numpy.typing as npt
+    from cv2.typing import MatLike
+
+    from ...annotations import BBoxKind
 
 
 class RelBBox(RelBBoxEditor, BBoxImgMixin):
@@ -20,22 +23,18 @@ class RelBBox(RelBBoxEditor, BBoxImgMixin):
         coords: Sequence,
         kind: BBoxKind | str = "x1y1x2y2",
         text: str = "",
-        **kwargs,
     ) -> None:
         super().__init__(coords, kind)
         self.text = text
-        self.__dict__.update(kwargs)
 
-    if _NUMPY_AVAILABLE:
+    def crop_from(self, img: npt.NDArray) -> npt.NDArray:
+        h, w, *_ = img.shape
+        x1 = round(self.x1 * w)
+        x2 = round(self.x2 * w)
+        y1 = round(self.y1 * h)
+        y2 = round(self.y2 * h)
 
-        def crop_from(self, img: npt.NDArray) -> npt.NDArray:
-            h, w, *_ = img.shape
-            x1 = round(self.x1 * w)
-            x2 = round(self.x2 * w)
-            y1 = round(self.y1 * h)
-            y2 = round(self.y2 * h)
-
-            return img[y1:y2, x1:x2]
+        return img[y1:y2, x1:x2]
 
     def is_valid(self) -> bool:
         if not (
@@ -51,12 +50,16 @@ class RelBBox(RelBBoxEditor, BBoxImgMixin):
     def as_abs(self, img_w: int, img_h: int):  # noqa: ANN201
         from ..abs.abs_bbox import AbsBBox  # noqa: PLC0415
 
-        x1, y1, x2, y2 = self.get_pascal_voc()
+        x1, y1, x2, y2 = self.get_x1y1x2y2()
         x1 = round(x1 * img_w)
         y1 = round(y1 * img_h)
         x2 = round(x2 * img_w)
         y2 = round(y2 * img_h)
         return AbsBBox((x1, y1, x2, y2), text=self.text)
+
+    def show_on(self, img: npt.NDArray[np.uint8] | MatLike) -> None:
+        h, w, *_ = img.shape
+        self.__show_on(self.as_abs(img_w=w, img_h=h).get_x1y1x2y2(), img, self.text)
 
     def __repr__(self) -> str:
         bbox = (

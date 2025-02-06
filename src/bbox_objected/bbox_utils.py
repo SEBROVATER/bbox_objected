@@ -85,7 +85,7 @@ def non_max_suppression(x1y1x2y2: list | npt.NDArray, thr: float) -> list[int | 
     import numpy as np  # noqa: PLC0415
 
     if issubclass(x1y1x2y2[0], BaseBBox):
-        x1y1x2y2 = np.array([bbox.get_pascal_voc() for bbox in x1y1x2y2])
+        x1y1x2y2 = np.array([bbox.get_x1y1x2y2() for bbox in x1y1x2y2])
     elif not isinstance(x1y1x2y2, np.ndarray):
         x1y1x2y2 = np.array(x1y1x2y2)
 
