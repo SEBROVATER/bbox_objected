@@ -150,7 +150,7 @@ bbox.show_on(img, text="sample")  # 'opencv' must be installed
 cv2.waitKey(1)
 cv2.destroyAllWindows()
 ```
-Also, there are several useful functions. Currently works only with `AbsBBox`.
+Also, there are several useful functions. Currently, works only with `AbsBBox`.
 
 ```python
 from bbox_objected import AbsBBox
