@@ -8,10 +8,7 @@ from .editor import RelBBoxEditor
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import numpy as np
-    import numpy.typing as npt
-    from cv2.typing import MatLike
-
+    from ..._typing import ImageLike
     from ...annotations import BBoxKind
 
 
@@ -27,7 +24,7 @@ class RelBBox(RelBBoxEditor, BBoxImgMixin):
         super().__init__(coords, kind)
         self.text = text
 
-    def crop_from(self, img: npt.NDArray) -> npt.NDArray:
+    def crop_from(self, img: ImageLike) -> ImageLike:
         h, w, *_ = img.shape
         x1 = round(self.x1 * w)
         x2 = round(self.x2 * w)
@@ -57,9 +54,9 @@ class RelBBox(RelBBoxEditor, BBoxImgMixin):
         y2 = round(y2 * img_h)
         return AbsBBox((x1, y1, x2, y2), text=self.text)
 
-    def show_on(self, img: npt.NDArray[np.uint8] | MatLike) -> None:
+    def show_on(self, img: ImageLike) -> None:
         h, w, *_ = img.shape
-        self.__show_on(self.as_abs(img_w=w, img_h=h).get_x1y1x2y2(), img, self.text)
+        self._show_on(self.as_abs(img_w=w, img_h=h).get_x1y1x2y2(), img, self.text)
 
     def __repr__(self) -> str:
         bbox = (

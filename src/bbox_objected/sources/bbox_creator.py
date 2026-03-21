@@ -1,9 +1,26 @@
 from collections.abc import Sequence
-from typing import Generic, TypeVar
+from typing import Generic, Protocol, TypeVar
+
+from typing_extensions import Self
 
 from ..annotations import BBoxKind
 
-T = TypeVar("T", int, float)
+TNum = TypeVar("TNum", bound="BBoxNumber")
+
+
+class BBoxNumber(Protocol):
+    def __float__(self) -> float: ...
+
+    def __le__(self, value: Self, /) -> bool: ...
+
+    def __add__(self, value: Self, /) -> Self: ...
+
+    def __sub__(self, value: Self, /) -> Self: ...
+
+    def __mul__(self, value: Self, /) -> Self: ...
+
+
+T = TypeVar("T", bound=BBoxNumber)
 
 
 class BaseBBox(Generic[T]):

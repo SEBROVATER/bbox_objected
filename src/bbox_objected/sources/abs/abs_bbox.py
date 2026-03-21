@@ -8,10 +8,7 @@ from .editor import AbsBBoxEditor
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import numpy as np
-    import numpy.typing as npt
-    from cv2.typing import MatLike
-
+    from ..._typing import ImageLike
     from ...annotations import BBoxKind
 
 
@@ -25,7 +22,7 @@ class AbsBBox(BBoxImgMixin, AbsBBoxEditor):
         super().__init__(coords, kind)
         self.text = text
 
-    def crop_from(self, img: npt.NDArray) -> npt.NDArray:
+    def crop_from(self, img: ImageLike) -> ImageLike:
         return img[self.y1 : self.y2, self.x1 : self.x2]
 
     def is_valid(self) -> bool:
@@ -49,8 +46,8 @@ class AbsBBox(BBoxImgMixin, AbsBBoxEditor):
         y2 /= img_h
         return RelBBox((x1, y1, x2, y2), text=self.text)
 
-    def show_on(self, img: npt.NDArray[np.uint8] | MatLike) -> None:
-        self.__show_on(self.get_x1y1x2y2(), img, self.text)
+    def show_on(self, img: ImageLike) -> None:
+        self._show_on(self.get_x1y1x2y2(), img, self.text)
 
     def __repr__(self) -> str:
         bbox = f"AbsBBox(x1={self.x1}, y1={self.y1}, x2={self.x2}, y2={self.y2})"

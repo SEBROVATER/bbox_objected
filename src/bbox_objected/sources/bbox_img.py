@@ -1,21 +1,18 @@
 from __future__ import annotations
 
+import importlib
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    import numpy as np
-    import numpy.typing as npt
-    from cv2.typing import MatLike
+    from .._typing import ImageLike
 
 
 class BBoxImgMixin:
     @staticmethod
-    def __show_on(
-        x1y1x2y2: tuple[int, int, int, int], img: npt.NDArray[np.uint8] | MatLike, text: str = ""
-    ) -> None:
+    def _show_on(x1y1x2y2: tuple[int, int, int, int], img: ImageLike, text: str = "") -> None:
         try:
-            import cv2  # noqa: PLC0415
-        except ImportError as exc:
+            cv2 = importlib.import_module("cv2")
+        except ModuleNotFoundError as exc:
             err = "'OpenCV' is required to use 'show_on' method"
             raise NotImplementedError(err) from exc
 

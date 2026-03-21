@@ -63,11 +63,11 @@ class BBoxGetter(BaseBBox[T], Generic[T]):
 
     @property
     def xc(self) -> float:
-        return (self.x1 + self.x2) / 2
+        return (float(self.x1) + float(self.x2)) / 2.0
 
     @property
     def yc(self) -> float:
-        return (self.y1 + self.y2) / 2
+        return (float(self.y1) + float(self.y2)) / 2.0
 
     @property
     def area(self) -> T:

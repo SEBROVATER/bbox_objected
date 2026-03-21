@@ -1,4 +1,3 @@
-# ruff: noqa: PLR2004, PLC0415
 import sys
 from pathlib import Path
 
@@ -94,10 +93,11 @@ def test_getters():
 
 
 def test_crop_from():
-    import numpy as np
+    import pytest
 
     from bbox_objected import AbsBBox
 
+    np = pytest.importorskip("numpy")
     bbox = AbsBBox((100, 200, 300, 400))  # 'x1y1x2y2' bbox kind is default
 
     img = np.empty((512, 512, 3), dtype=np.uint8)  # random RGB image

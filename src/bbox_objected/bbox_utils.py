@@ -1,29 +1,27 @@
 from __future__ import annotations
 
 import math
-from typing import TYPE_CHECKING
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, TypeGuard
 
 if TYPE_CHECKING:
-    import numpy.typing as npt
-
     from . import AbsBBox, RelBBox
 
-from .sources.bbox_creator import BaseBBox
+from .sources.bbox_getter import BBoxGetter
+
+
+def _is_bbox_getter(item: object) -> TypeGuard[BBoxGetter[int | float]]:
+    return isinstance(item, BBoxGetter)
 
 
 def get_cos_between(
     bbox1: RelBBox | AbsBBox, bbox2: RelBBox | AbsBBox, xc: float, yc: float
 ) -> float:
-    import numpy as np  # noqa: PLC0415
-
-    v1 = np.array([bbox1.xc - xc, bbox1.yc - yc])
-    v2 = np.array([bbox2.xc - xc, bbox2.yc - yc])
-
-    inner = np.inner(v1, v2)
-    norms = np.linalg.norm(v1) * np.linalg.norm(v2)
-
-    cos = inner / norms
-    return cos
+    v1x, v1y = bbox1.xc - xc, bbox1.yc - yc
+    v2x, v2y = bbox2.xc - xc, bbox2.yc - yc
+    inner = v1x * v2x + v1y * v2y
+    norms = math.hypot(v1x, v1y) * math.hypot(v2x, v2y)
+    return inner / norms
 
 
 def get_IoU(bbox_1: RelBBox | AbsBBox, bbox_2: RelBBox | AbsBBox) -> float:  # noqa: N802
@@ -78,54 +76,51 @@ def get_distance(bbox_1: RelBBox | AbsBBox, bbox_2: RelBBox | AbsBBox) -> float:
     return math.dist(bbox_1.center, bbox_2.center)
 
 
-def non_max_suppression(x1y1x2y2: list | npt.NDArray, thr: float) -> list[int | float]:  # noqa: PLR0914
+def non_max_suppression(
+    x1y1x2y2: Sequence[BBoxGetter[int | float] | Sequence[int | float]],
+    thr: float,
+) -> list[int]:
     if len(x1y1x2y2) == 0:
         return []
 
-    import numpy as np  # noqa: PLC0415
+    boxes: list[tuple[float, float, float, float]]
+    if isinstance(x1y1x2y2[0], BBoxGetter):
+        boxes = []
+        for item in x1y1x2y2:
+            if not _is_bbox_getter(item):
+                msg = "Expected all items to be bbox objects of the same input shape."
+                raise TypeError(msg)
+            x1, y1, x2, y2 = item.get_x1y1x2y2()
+            boxes.append((float(x1), float(y1), float(x2), float(y2)))
+    else:
+        boxes = []
+        for item in x1y1x2y2:
+            if isinstance(item, BBoxGetter):
+                msg = "Expected all items to be coordinate sequences of the same input shape."
+                raise TypeError(msg)
+            if len(item) < 4:  # noqa: PLR2004
+                msg = "Each coordinates item must contain at least 4 values: x1, y1, x2, y2."
+                raise ValueError(msg)
+            boxes.append((float(item[0]), float(item[1]), float(item[2]), float(item[3])))
 
-    if issubclass(x1y1x2y2[0], BaseBBox):
-        x1y1x2y2 = np.array([bbox.get_x1y1x2y2() for bbox in x1y1x2y2])
-    elif not isinstance(x1y1x2y2, np.ndarray):
-        x1y1x2y2 = np.array(x1y1x2y2)
-
-    # if the bounding x1y1x2y2 integers, convert them to floats --
-    # this is important since we'll be doing a bunch of divisions
-    if x1y1x2y2.dtype.kind == "i":
-        x1y1x2y2 = x1y1x2y2.astype("float")
-    # initialize the list of picked indexes
-    pick = []
-    # grab the coordinates of the bounding x1y1x2y2
-    x1 = x1y1x2y2[:, 0]
-    y1 = x1y1x2y2[:, 1]
-    x2 = x1y1x2y2[:, 2]
-    y2 = x1y1x2y2[:, 3]
-    # compute the area of the bounding x1y1x2y2 and sort the bounding
-    # x1y1x2y2 by the bottom-right y-coordinate of the bounding box
-    area = (x2 - x1 + 1) * (y2 - y1 + 1)
-    idxs = np.argsort(y2)  # TODO: add sorting by area
-    # keep looping while some indexes still remain in the indexes
-    # list
+    pick: list[int] = []
+    areas = [(x2 - x1 + 1.0) * (y2 - y1 + 1.0) for x1, y1, x2, y2 in boxes]
+    idxs = sorted(range(len(boxes)), key=lambda i: boxes[i][3])  # TODO: add sorting by area
     while len(idxs) > 0:
-        # grab the last index in the indexes list and add the
-        # index value to the list of picked indexes
-        last = len(idxs) - 1
-        i = idxs[last]
+        i = idxs.pop()
         pick.append(i)
-        # find the largest (x, y) coordinates for the start of
-        # the bounding box and the smallest (x, y) coordinates
-        # for the end of the bounding box
-        xx1 = np.maximum(x1[i], x1[idxs[:last]])
-        yy1 = np.maximum(y1[i], y1[idxs[:last]])
-        xx2 = np.minimum(x2[i], x2[idxs[:last]])
-        yy2 = np.minimum(y2[i], y2[idxs[:last]])
-        # compute the width and height of the bounding box
-        w = np.maximum(0, xx2 - xx1 + 1)
-        h = np.maximum(0, yy2 - yy1 + 1)
-        # compute the ratio of overlap
-        overlap = (w * h) / area[idxs[:last]]
-        # delete all indexes from the index list that have
-        idxs = np.delete(idxs, np.concatenate(([last], np.where(overlap > thr)[0])))
-    # return only the bounding x1y1x2y2 that were picked using the
-    # integer data type
+        x1_i, y1_i, x2_i, y2_i = boxes[i]
+        next_idxs: list[int] = []
+        for j in idxs:
+            x1_j, y1_j, x2_j, y2_j = boxes[j]
+            xx1 = max(x1_i, x1_j)
+            yy1 = max(y1_i, y1_j)
+            xx2 = min(x2_i, x2_j)
+            yy2 = min(y2_i, y2_j)
+            w = max(0.0, xx2 - xx1 + 1.0)
+            h = max(0.0, yy2 - yy1 + 1.0)
+            overlap = (w * h) / areas[j] if areas[j] else 0.0
+            if overlap <= thr:
+                next_idxs.append(j)
+        idxs = next_idxs
     return pick
