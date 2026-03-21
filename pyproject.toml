@@ -48,6 +48,8 @@ testpaths = [ "tests" ]
 
 [dependency-groups]
 dev = [
+    "numpy>=2.2.6",
+    "opencv-python>=4.13.0.92",
     "pre-commit>=4.1.0",
     "pyrefly>=0.57.1",
     "pyright>=1.1.393",

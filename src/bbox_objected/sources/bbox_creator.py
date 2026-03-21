@@ -5,8 +5,6 @@ from typing_extensions import Self
 
 from ..annotations import BBoxKind
 
-TNum = TypeVar("TNum", bound="BBoxNumber")
-
 
 class BBoxNumber(Protocol):
     def __float__(self) -> float: ...

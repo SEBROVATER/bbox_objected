@@ -107,14 +107,16 @@ def test_crop_from():
 
 
 def test_bbox_utils():
+    import pytest
+
     from bbox_objected import AbsBBox
     from bbox_objected.bbox_utils import get_cos_between, get_distance, get_IoU
 
     bbox_1 = AbsBBox((100, 200, 300, 400), kind="x1y1wh")
     bbox_2 = AbsBBox((100, 400, 100, 400), kind="horizontal_list")
 
-    assert get_distance(bbox_1, bbox_2) == 150.0
+    assert get_distance(bbox_1, bbox_2) == pytest.approx(150.0)
     # Intersection over Union
-    assert get_IoU(bbox_1, bbox_2) == 0.4
+    assert get_IoU(bbox_1, bbox_2) == pytest.approx(0.4)
     # angle around center in (450 ,350)
-    assert get_cos_between(bbox_1, bbox_2, 450, 350) == 0.7592566023652966
+    assert get_cos_between(bbox_1, bbox_2, 450, 350) == pytest.approx(0.7592566023652966)
