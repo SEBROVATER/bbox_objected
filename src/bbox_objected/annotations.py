@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 from enum import Enum
 
 
 class BBoxKind(str, Enum):
-    free_list = tl_tr_br_bl = "tl_tr_br_bl"
-    horizontal_list = x1x2y1y2 = "x1x2y1y2"
-    pascal_voc = x1y1x2y2 = "x1y1x2y2"
-    coco = x1y1wh = "x1y1wh"
-    winocr = "winocr"
-    mss = "mss"
+    TL_TR_BR_BL = "tl_tr_br_bl"
+    X1X2Y1Y2 = "x1x2y1y2"
+    X1Y1X2Y2 = "x1y1x2y2"
+    X1Y1WH = "x1y1wh"
+    WINOCR = "winocr"
+    MSS = "mss"
 
     def __str__(self) -> str:
-        return self.name
+        return self.value

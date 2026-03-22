@@ -1,5 +1,4 @@
-import types
-
+from .adapters.image import crop_from_image, show_on_image
 from .bbox_utils import (
     get_cos_between,
     get_distance,
@@ -13,10 +12,11 @@ from .sources.rel.rel_bbox import RelBBox
 __all__ = [
     "AbsBBox",
     "RelBBox",
+    "crop_from_image",
     "get_IoU",
     "get_cos_between",
     "get_distance",
     "non_max_suppression",
+    "show_on_image",
     "sort_clockwise",
-    "types",
 ]

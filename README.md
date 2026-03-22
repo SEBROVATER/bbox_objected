@@ -31,8 +31,9 @@ You can install `numpy` or `opencv` separately. But just for fun, some extra opt
 
 ```python
 from bbox_objected import AbsBBox
+from bbox_objected.annotations import BBoxKind
 
-bbox = AbsBBox((35, 45, 100, 80), kind="x1y1wh", text="abs_sample")
+bbox = AbsBBox((35, 45, 100, 80), kind=BBoxKind.X1Y1WH, text="abs_sample")
 
 assert repr(bbox) == "<AbsBBox(x1=35, y1=45, x2=135, y2=125) - abs_sample>"
 assert bbox.get_x1y1x2y2() == (35, 45, 135, 125)
@@ -41,8 +42,9 @@ If you need to store relative coordinates, you can use `RelBBox` (values in rang
 
 ```python
 from bbox_objected import RelBBox
+from bbox_objected.annotations import BBoxKind
 
-bbox = RelBBox((0.1, 0.2, 0.5, 0.6), kind="x1x2y1y2", text="rel_sample")
+bbox = RelBBox((0.1, 0.2, 0.5, 0.6), kind=BBoxKind.X1X2Y1Y2, text="rel_sample")
 
 assert repr(bbox) == "<RelBBox(x1=0.1, y1=0.5, x2=0.2, y2=0.6) - rel_sample>"
 assert bbox.get_tl_tr_br_bl() == ((0.1, 0.5), (0.2, 0.5), (0.2, 0.6), (0.1, 0.6))
@@ -51,8 +53,9 @@ Conversion between types is available
 
 ```python
 from bbox_objected import RelBBox
+from bbox_objected.annotations import BBoxKind
 
-bbox = RelBBox((0.1, 0.2, 0.5, 0.6), kind="x1y1x2y2", text="sample")
+bbox = RelBBox((0.1, 0.2, 0.5, 0.6), kind=BBoxKind.X1Y1X2Y2, text="sample")
 
 assert repr(bbox) == "<RelBBox(x1=0.1, y1=0.2, x2=0.5, y2=0.6) - sample>"
 assert (
@@ -85,21 +88,17 @@ Available _**kinds**_ of bboxes:
 from bbox_objected.annotations import BBoxKind
 
 # special format of 'EasyOCR' library
-assert BBoxKind.free_list == "tl_tr_br_bl"
-assert BBoxKind.tl_tr_br_bl == "tl_tr_br_bl"
+assert str(BBoxKind.TL_TR_BR_BL) == "tl_tr_br_bl"
 # special format of 'EasyOCR' library
-assert BBoxKind.horizontal_list == "x1x2y1y2"
-assert BBoxKind.x1x2y1y2 == "x1x2y1y2"
+assert str(BBoxKind.X1X2Y1Y2) == "x1x2y1y2"
 # own format of PascalVOC image dataset
-assert BBoxKind.pascal_voc == "x1y1x2y2"
-assert BBoxKind.x1y1x2y2 == "x1y1x2y2"
+assert str(BBoxKind.X1Y1X2Y2) == "x1y1x2y2"
 # own format of COCO image dataset
-assert BBoxKind.coco == "x1y1wh"
-assert BBoxKind.x1y1wh == "x1y1wh"
-# gets special coords format of 'WinOCR' library
-assert BBoxKind.winocr == "winocr"
+assert str(BBoxKind.X1Y1WH) == "x1y1wh"
+# special coords format of 'WinOCR' library
+assert str(BBoxKind.WINOCR) == "winocr"
 # gets 'monitor' object of library 'mss'
-assert BBoxKind.mss == "mss"
+assert str(BBoxKind.MSS) == "mss"
 ```
 There is respective `get_` method for each bbox _**kind**_, except `"winocr"`
 
@@ -137,16 +136,16 @@ Each bbox can be drawn or cropped from image. Can work both with `AbsBBox` and `
 import numpy as np
 import cv2
 
-from bbox_objected import AbsBBox
+from bbox_objected import AbsBBox, crop_from_image, show_on_image
 
 bbox = AbsBBox((100, 200, 300, 400))  # 'x1y1x2y2' bbox kind is default
 
 img = np.empty((512, 512, 3), dtype=np.uint8)  # random RGB image
 
-cropped = bbox.crop_from(img)  # 'numpy' must be installed
+cropped = crop_from_image(bbox, img)  # 'numpy' must be installed
 assert cropped.shape == (200, 200, 3)
 
-bbox.show_on(img, text="sample")  # 'opencv' must be installed
+show_on_image(bbox, img, text="sample")  # 'opencv' must be installed
 cv2.waitKey(1)
 cv2.destroyAllWindows()
 ```
@@ -154,10 +153,11 @@ Also, there are several useful functions. Currently, works only with `AbsBBox`.
 
 ```python
 from bbox_objected import AbsBBox
+from bbox_objected.annotations import BBoxKind
 from bbox_objected.bbox_utils import get_distance, get_IoU, get_cos_between
 
-bbox_1 = AbsBBox((100, 200, 300, 400), kind="x1y1wh")
-bbox_2 = AbsBBox((100, 400, 100, 400), kind="horizontal_list")
+bbox_1 = AbsBBox((100, 200, 300, 400), kind=BBoxKind.X1Y1WH)
+bbox_2 = AbsBBox((100, 400, 100, 400), kind=BBoxKind.X1X2Y1Y2)
 
 assert get_distance(bbox_1, bbox_2) == 150.0
 # Intersection over Union
@@ -165,4 +165,3 @@ assert get_IoU(bbox_1, bbox_2) == 0.4
 # angle around center in (450 ,350)
 assert get_cos_between(bbox_1, bbox_2, 450, 350) == 0.7592566023652966
 ```
-
