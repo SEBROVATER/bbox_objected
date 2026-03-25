@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import operator
 from collections.abc import Sequence
 from typing import Protocol, TypeAlias, TypeGuard
 
@@ -104,7 +105,18 @@ def get_IoU(bbox_1: BBoxLike, bbox_2: BBoxLike) -> float:  # noqa: N802
 
 
 def sort_clockwise(bboxes: Sequence[BBoxLike], xc: float, yc: float) -> list[BBoxLike]:
-    return sorted(bboxes, key=lambda bbox: math.atan2(bbox.yc - yc, bbox.xc - xc), reverse=True)
+    def _polar_key(bbox: BBoxLike) -> tuple[float, float]:
+        dx = bbox.xc - xc
+        dy = bbox.yc - yc
+        angle = math.atan2(dy, dx)
+        if angle < 0:
+            angle += 2 * math.pi
+        adjusted = (2 * math.pi - angle) % (2 * math.pi)
+        return adjusted, math.hypot(dx, dy)
+
+    items = [(bbox, *_polar_key(bbox)) for bbox in bboxes]
+    items.sort(key=operator.itemgetter(1, 2))
+    return [bbox for bbox, *_ in items]
 
 
 def get_distance(bbox_1: BBoxLike, bbox_2: BBoxLike) -> float:
