@@ -2,47 +2,82 @@ from __future__ import annotations
 
 import math
 from collections.abc import Sequence
-from typing import TypeAlias, TypeGuard
-
-from .sources.bbox_getter import BBoxGetter
-
-BBoxGetterLike: TypeAlias = BBoxGetter
-BBoxInput: TypeAlias = BBoxGetterLike | Sequence[int | float]
+from typing import Protocol, TypeAlias, TypeGuard
 
 
-def _is_bbox_getter(item: object) -> TypeGuard[BBoxGetterLike]:
-    return isinstance(item, BBoxGetter)
+class BBoxLike(Protocol):
+    @property
+    def x1(self) -> float: ...
+
+    @property
+    def y1(self) -> float: ...
+
+    @property
+    def x2(self) -> float: ...
+
+    @property
+    def y2(self) -> float: ...
+
+    @property
+    def area(self) -> float: ...
+
+    @property
+    def center(self) -> tuple[float, float]: ...
+
+    @property
+    def xc(self) -> float: ...
+
+    @property
+    def yc(self) -> float: ...
+
+    def as_tuple(self) -> tuple[int | float, int | float, int | float, int | float]: ...
 
 
-def _to_boxes(
-    x1y1x2y2: Sequence[BBoxInput],
-) -> list[tuple[float, float, float, float]]:
+BBoxInput: TypeAlias = BBoxLike | Sequence[float]
+
+
+def _is_bbox_like(item: object) -> TypeGuard[BBoxLike]:
+    return hasattr(item, "as_tuple")
+
+
+def _all_bbox_like(items: Sequence[BBoxInput]) -> TypeGuard[Sequence[BBoxLike]]:
+    return len(items) > 0 and all(_is_bbox_like(item) for item in items)
+
+
+def _to_boxes(x1y1x2y2: Sequence[BBoxInput]) -> list[tuple[float, float, float, float]]:
     if len(x1y1x2y2) == 0:
         return []
 
-    if isinstance(x1y1x2y2[0], BBoxGetter):
+    if _all_bbox_like(x1y1x2y2):
         boxes: list[tuple[float, float, float, float]] = []
         for item in x1y1x2y2:
-            if not _is_bbox_getter(item):
-                msg = "Expected all items to be bbox objects of the same input shape."
-                raise TypeError(msg)
-            x1, y1, x2, y2 = item.get_x1y1x2y2()
+            x1, y1, x2, y2 = item.as_tuple()
             boxes.append((float(x1), float(y1), float(x2), float(y2)))
         return boxes
 
     boxes = []
     for item in x1y1x2y2:
-        if isinstance(item, BBoxGetter):
+        if _is_bbox_like(item):
             msg = "Expected all items to be coordinate sequences of the same input shape."
+            raise TypeError(msg)
+        if not isinstance(item, Sequence):
+            msg = "Expected coordinate sequences for bbox data."
             raise TypeError(msg)
         if len(item) < 4:  # noqa: PLR2004
             msg = "Each coordinates item must contain at least 4 values: x1, y1, x2, y2."
             raise ValueError(msg)
-        boxes.append((float(item[0]), float(item[1]), float(item[2]), float(item[3])))
+        boxes.append(
+            (
+                _require_number(item[0]),
+                _require_number(item[1]),
+                _require_number(item[2]),
+                _require_number(item[3]),
+            )
+        )
     return boxes
 
 
-def get_cos_between(bbox1: BBoxGetterLike, bbox2: BBoxGetterLike, xc: float, yc: float) -> float:
+def get_cos_between(bbox1: BBoxLike, bbox2: BBoxLike, xc: float, yc: float) -> float:
     v1x, v1y = bbox1.xc - xc, bbox1.yc - yc
     v2x, v2y = bbox2.xc - xc, bbox2.yc - yc
     inner = v1x * v2x + v1y * v2y
@@ -53,7 +88,7 @@ def get_cos_between(bbox1: BBoxGetterLike, bbox2: BBoxGetterLike, xc: float, yc:
     return inner / norms
 
 
-def get_IoU(bbox_1: BBoxGetterLike, bbox_2: BBoxGetterLike) -> float:  # noqa: N802
+def get_IoU(bbox_1: BBoxLike, bbox_2: BBoxLike) -> float:  # noqa: N802
     x1 = max(float(bbox_1.x1), float(bbox_2.x1))
     y1 = max(float(bbox_1.y1), float(bbox_2.y1))
     x2 = min(float(bbox_1.x2), float(bbox_2.x2))
@@ -68,11 +103,11 @@ def get_IoU(bbox_1: BBoxGetterLike, bbox_2: BBoxGetterLike) -> float:  # noqa: N
     return inter_area / (area1 + area2 - inter_area)
 
 
-def sort_clockwise(bboxes: Sequence[BBoxGetterLike], xc: float, yc: float) -> list[BBoxGetterLike]:
+def sort_clockwise(bboxes: Sequence[BBoxLike], xc: float, yc: float) -> list[BBoxLike]:
     return sorted(bboxes, key=lambda bbox: math.atan2(bbox.yc - yc, bbox.xc - xc), reverse=True)
 
 
-def get_distance(bbox_1: BBoxGetterLike, bbox_2: BBoxGetterLike) -> float:
+def get_distance(bbox_1: BBoxLike, bbox_2: BBoxLike) -> float:
     return math.dist(bbox_1.center, bbox_2.center)
 
 
@@ -90,6 +125,15 @@ def _overlap_ratio(
     w = max(0.0, xx2 - xx1)
     h = max(0.0, yy2 - yy1)
     return (w * h) / area_b if area_b else 0.0
+
+
+def _require_number(value: object) -> float:
+    err = "Invalid coordinate value"
+    if isinstance(value, bool):
+        raise TypeError(err)
+    if isinstance(value, (int, float)):
+        return float(value)
+    raise TypeError(err)
 
 
 def non_max_suppression(

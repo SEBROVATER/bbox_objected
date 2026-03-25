@@ -1,33 +1,24 @@
 from __future__ import annotations
 
 import importlib
-from typing import TYPE_CHECKING, Any, TypeAlias
+from typing import TYPE_CHECKING, Any
 
-from ..sources.abs.abs_bbox import AbsBBox
+from ..domain.abs_bbox import AbsBBox
 
 if TYPE_CHECKING:
     from .._typing import ImageLike
-    from ..sources.rel.rel_bbox import RelBBox
-
-BBoxImageLike: TypeAlias = "AbsBBox | RelBBox"
+    from ..domain.rel_bbox import RelBBox
 
 
-def _as_abs_coords(bbox: BBoxImageLike, img: ImageLike) -> tuple[int, int, int, int]:
+def _as_abs_coords(bbox: AbsBBox | RelBBox, img: ImageLike) -> tuple[int, int, int, int]:
     if isinstance(bbox, AbsBBox):
-        x1, y1, x2, y2 = bbox.get_x1y1x2y2()
-        return int(x1), int(y1), int(x2), int(y2)
+        return bbox.as_tuple()
 
     h, w, *_ = img.shape
-    x1, y1, x2, y2 = bbox.as_abs(img_w=w, img_h=h).get_x1y1x2y2()
-    return int(x1), int(y1), int(x2), int(y2)
+    return bbox.as_abs(img_w=w, img_h=h).as_tuple()
 
 
-def crop_from_image(bbox: BBoxImageLike, img: ImageLike) -> ImageLike:
-    x1, y1, x2, y2 = _as_abs_coords(bbox, img)
-    return img[y1:y2, x1:x2]
-
-
-def show_on_image(bbox: BBoxImageLike, img: ImageLike, text: str | None = None) -> None:
+def show_on_image(bbox: AbsBBox | RelBBox, img: ImageLike, text: str | None = None) -> None:
     try:
         cv2 = importlib.import_module("cv2")
     except ModuleNotFoundError as exc:
