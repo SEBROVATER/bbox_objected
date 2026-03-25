@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from .coords import RectCoords
 from .validators import validate_abs
-
-if TYPE_CHECKING:
-    from collections.abc import Iterable
 
 
 class AbsBBox:  # noqa: PLR0904
@@ -17,11 +12,6 @@ class AbsBBox:  # noqa: PLR0904
         self._coords = RectCoords(x1, y1, x2, y2)
         self.text = text
         self._validate()
-
-    @classmethod
-    def from_tuple(cls, coords: Iterable[int], text: str = "") -> AbsBBox:
-        x1, y1, x2, y2 = coords
-        return cls(int(x1), int(y1), int(x2), int(y2), text=text)
 
     def _validate(self) -> None:
         validate_abs(self._coords.x1, self._coords.y1, self._coords.x2, self._coords.y2)
@@ -146,17 +136,6 @@ class AbsBBox:  # noqa: PLR0904
             round(self.y1 * factor),
             round(self.x2 * factor),
             round(self.y2 * factor),
-        )
-
-    def divide(self, value: float) -> None:
-        if value <= 0:
-            err = "Divisor must be positive"
-            raise ValueError(err)
-        self._set_coords(
-            round(self.x1 / value),
-            round(self.y1 / value),
-            round(self.x2 / value),
-            round(self.y2 / value),
         )
 
     def replace_from(self, other: AbsBBox) -> None:

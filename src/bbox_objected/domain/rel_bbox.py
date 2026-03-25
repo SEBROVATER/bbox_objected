@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 from .coords import RectCoords
 from .validators import validate_rel
-
-if TYPE_CHECKING:
-    from collections.abc import Iterable
 
 
 class RelBBox:  # noqa: PLR0904
@@ -16,11 +11,6 @@ class RelBBox:  # noqa: PLR0904
         self._coords = RectCoords(float(x1), float(y1), float(x2), float(y2))
         self.text = text
         self._validate()
-
-    @classmethod
-    def from_tuple(cls, coords: Iterable[float], text: str = "") -> RelBBox:
-        x1, y1, x2, y2 = coords
-        return cls(float(x1), float(y1), float(x2), float(y2), text=text)
 
     def _validate(self) -> None:
         validate_rel(self._coords.x1, self._coords.y1, self._coords.x2, self._coords.y2)
@@ -148,17 +138,6 @@ class RelBBox:  # noqa: PLR0904
             self.y1 * factor,
             self.x2 * factor,
             self.y2 * factor,
-        )
-
-    def divide(self, value: float) -> None:
-        if value <= 0:
-            err = "Divisor must be positive"
-            raise ValueError(err)
-        self._set_coords(
-            self.x1 / value,
-            self.y1 / value,
-            self.x2 / value,
-            self.y2 / value,
         )
 
     def replace_from(self, other: RelBBox) -> None:

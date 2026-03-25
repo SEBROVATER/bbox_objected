@@ -1,5 +1,3 @@
-from .adapters.numpy import crop_from_image
-from .adapters.opencv import show_on_image
 from .domain.abs_bbox import AbsBBox
 from .domain.rel_bbox import RelBBox
 from .services.metrics import (
@@ -13,11 +11,9 @@ from .services.metrics import (
 __all__ = [
     "AbsBBox",
     "RelBBox",
-    "crop_from_image",
     "get_IoU",
     "get_cos_between",
     "get_distance",
     "non_max_suppression",
-    "show_on_image",
     "sort_clockwise",
 ]
