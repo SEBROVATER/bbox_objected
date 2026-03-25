@@ -1,59 +1,52 @@
 [project]
 name = "bbox_objected"
-version = "0.2.9"
+version = "1.0.0"
 description = "Manipulate bounding boxes as objects"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
 authors = [
-    { name = "SEBROVATER", email = "sebrovskiy.k@gmail.com" },
+  { name = "SEBROVATER", email = "sebrovskiy.k@gmail.com" },
 ]
 dependencies = []
-requires-python = ">=3.10"
-readme = "README.md"
-license = {text = "Apache-2.0"}
 
 [project.urls]
 home = "https://github.com/SEBROVATER/bbox_objected"
 
 [project.optional-dependencies]
 contrib = [
-    "numpy>=1.22.0",
-    "opencv-contrib-python>=4.7.0.71",
+  "numpy>=1.22.0",
+  "opencv-contrib-python>=4.7.0.71",
 ]
 contrib-headless = [
-    "numpy>=1.22.0",
-    "opencv-contrib-python-headless>=4.7.0.71",
-]
-opencv = [
-    "numpy>=1.22.0",
-    "opencv-python>=4.7.0.71",
+  "numpy>=1.22.0",
+  "opencv-contrib-python-headless>=4.7.0.71",
 ]
 headless = [
-    "numpy>=1.22.0",
-    "opencv-python-headless>=4.7.0.71",
+  "numpy>=1.22.0",
+  "opencv-python-headless>=4.7.0.71",
 ]
-
-[tool.uv]
-package = true
-
-[build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
-
-[tool.pdm.build]
-excludes = ["tests"]
-
-[tool.pytest.ini_options]
-minversion = "8.0"
-addopts = "-ra"
-testpaths = [ "tests" ]
+opencv = [
+  "numpy>=1.22.0",
+  "opencv-python>=4.7.0.71",
+]
 
 [dependency-groups]
 dev = [
-    "numpy>=2.2.6",
-    "opencv-python>=4.13.0.92",
-    "pre-commit>=4.1.0",
-    "pyrefly>=0.57.1",
-    "pyright>=1.1.393",
-    "pytest>=8.3.4",
-    "ruff>=0.9.4",
-    "ty>=0.0.24",
+  "numpy>=1.22.0",
+  "opencv-python>=4.13.0.92",
+  "pre-commit>=4.1.0",
+  "pyrefly>=0.57.1",
+  "pyright>=1.1.393",
+  "pytest>=8.3.4",
+  "pytest-markdown-docs>=0.9.2",
+  "ruff>=0.9.4",
+  "ty>=0.0.24",
 ]
+
+[build-system]
+requires = ["uv_build>=0.11.1,<0.12"]
+build-backend = "uv_build"
+
+[tool.uv]
+package = true
