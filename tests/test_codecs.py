@@ -11,7 +11,7 @@ def test_coco_length_validation() -> None:
 
 def test_coco_abs_requires_ints() -> None:
     with pytest.raises(TypeError, match="integer coords"):
-        coco.to_abs_bbox((1, 2.0, 3, 4))
+        coco.to_abs_bbox((1, 2.0, 3, 4))  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_coco_round_trip_abs() -> None:
@@ -23,7 +23,7 @@ def test_coco_round_trip_abs() -> None:
 
 def test_pascal_voc_abs_validation() -> None:
     with pytest.raises(TypeError, match="integer coords"):
-        pascal_voc.to_abs_bbox((1.0, 2, 3, 4))
+        pascal_voc.to_abs_bbox((1.0, 2, 3, 4))  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_pascal_voc_round_trip_rel() -> None:
@@ -38,7 +38,7 @@ def test_easyocr_validation() -> None:
         easyocr.to_rel_bbox(((0.0, 0.0), (1.0, 1.0), (0.0, 1.0)))
 
     with pytest.raises(TypeError, match="integer coords"):
-        easyocr.to_abs_bbox(((0.1, 0.2), (0.3, 0.2), (0.3, 0.4), (0.1, 0.4)))
+        easyocr.to_abs_bbox(((0.1, 0.2), (0.3, 0.2), (0.3, 0.4), (0.1, 0.4)))  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_easyocr_round_trip_abs() -> None:
@@ -53,7 +53,7 @@ def test_winocr_validation() -> None:
         winocr.to_abs_bbox({"x": 1, "y": 2, "width": 3})
 
     with pytest.raises(TypeError, match="integer coords"):
-        winocr.to_abs_bbox({"x": 1, "y": 2, "width": 3, "height": 4.0})
+        winocr.to_abs_bbox({"x": 1, "y": 2, "width": 3, "height": 4.0})  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_mss_validation() -> None:
@@ -61,7 +61,7 @@ def test_mss_validation() -> None:
         mss.to_abs_bbox({"left": 1, "top": 2, "width": 3})
 
     with pytest.raises(TypeError, match="integer coords"):
-        mss.to_abs_bbox({"left": 1, "top": 2, "width": 3, "height": 4.0})
+        mss.to_abs_bbox({"left": 1, "top": 2, "width": 3, "height": 4.0})  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_mss_round_trip_abs() -> None:

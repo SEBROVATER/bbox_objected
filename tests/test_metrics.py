@@ -6,10 +6,10 @@ from bbox_objected.services import metrics
 
 def test_get_iou_extremes() -> None:
     bbox = AbsBBox(0, 0, 10, 10)
-    assert metrics.get_IoU(bbox, bbox) == 1.0
+    assert metrics.get_IoU(bbox, bbox) == pytest.approx(1.0)
 
     other = AbsBBox(20, 20, 30, 30)
-    assert metrics.get_IoU(bbox, other) == 0.0
+    assert metrics.get_IoU(bbox, other) == pytest.approx(0.0)
 
 
 def test_get_cos_between_rejects_zero_vector() -> None:

@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 import pytest
 
 from bbox_objected import AbsBBox, RelBBox
@@ -16,9 +14,8 @@ def test_rel_init_correct() -> None:
 
 
 def test_abs_init_requires_int() -> None:
-    if not TYPE_CHECKING:
-        with pytest.raises(TypeError, match="Use only 'int' coords"):
-            AbsBBox(1.0, 2.0, 3.0, 4.0)
+    with pytest.raises(TypeError, match="Use only 'int' coords"):
+        AbsBBox(1.0, 2.0, 3.0, 4.0)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_rel_init_requires_range() -> None:
@@ -44,12 +41,11 @@ def test_replace_and_update_validate_type() -> None:
     abs_bbox = AbsBBox(0, 0, 1, 1)
     rel_bbox = RelBBox(0.1, 0.2, 0.3, 0.4)
 
-    if not TYPE_CHECKING:
-        with pytest.raises(TypeError, match="AbsBBox"):
-            abs_bbox.replace_from(rel_bbox)
+    with pytest.raises(TypeError, match="AbsBBox"):
+        abs_bbox.replace_from(rel_bbox)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
-        with pytest.raises(TypeError, match="RelBBox"):
-            rel_bbox.update_from(abs_bbox)
+    with pytest.raises(TypeError, match="RelBBox"):
+        rel_bbox.update_from(abs_bbox)  # type: ignore[arg-type]  # ty: ignore[invalid-argument-type]
 
 
 def test_conversion_requires_positive_image_size() -> None:

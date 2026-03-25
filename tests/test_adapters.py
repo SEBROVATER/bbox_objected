@@ -1,5 +1,4 @@
 import importlib
-from types import SimpleNamespace
 
 import pytest
 
@@ -28,11 +27,13 @@ def test_crop_from_image_rel_bbox() -> None:
 
 
 def test_show_on_image_requires_opencv(monkeypatch: pytest.MonkeyPatch) -> None:
-    def _raise(_: str):
+    np = pytest.importorskip("numpy")
+
+    def _raise(_: str) -> None:
         raise ModuleNotFoundError
 
     monkeypatch.setattr(importlib, "import_module", _raise)
 
-    fake_img = SimpleNamespace(copy=lambda: SimpleNamespace(ndim=3, shape=(10, 10, 3)))
+    fake_img = np.zeros((10, 10, 3), dtype=np.uint8)
     with pytest.raises(NotImplementedError, match="OpenCV"):
         show_on_image(AbsBBox(0, 0, 1, 1), fake_img)
