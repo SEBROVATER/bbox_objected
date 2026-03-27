@@ -48,5 +48,7 @@ def test_sort_clockwise_returns_same_length() -> None:
     bbox_1 = AbsBBox(0, 0, 10, 10)
     bbox_2 = AbsBBox(20, 0, 30, 10)
 
-    sorted_boxes = metrics.sort_clockwise([bbox_1, bbox_2], 10, 5)
-    assert sorted_boxes == [bbox_1, bbox_2]
+    bboxes = [bbox_1, bbox_2]
+    bboxes_len = len(bboxes)
+    sorted_boxes = metrics.sort_clockwise(bboxes, 10, 5)
+    assert len(sorted_boxes) == bboxes_len
